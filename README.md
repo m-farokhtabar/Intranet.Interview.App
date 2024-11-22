@@ -63,6 +63,7 @@ The application follows **Clean Architecture** principles to ensure modularity, 
 ### 2. Validation Rules
 - Basic validation rules (e.g., required fields, email formatting, number range checks) were implemented.
 - Custom or cross-field validation is excluded in this version but can be added in future iterations.
+- If a field does not have the required attribute, it means it is optional, such as age.
 
 ### 3. In-Memory Database
 - Data is stored temporarily using an in-memory database. Data will not persist after the application stops.
