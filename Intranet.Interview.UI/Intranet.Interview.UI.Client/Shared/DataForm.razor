@@ -1,0 +1,64 @@
+﻿@using Intranet.Interview.UI.Client.Model
+@using Intranet.Interview.UI.Client.Services
+@using System.ComponentModel.DataAnnotations
+
+<MudThemeProvider />
+<MudPopoverProvider />
+
+<MudForm @ref="form" @bind-IsValid="@success">
+    <MudText Typo="Typo.h5" GutterBottom="true">@MetaForm.Title</MudText>
+    <MudPaper Class="pa-4">
+        @foreach (var field in MetaForm.Fields)
+        {
+            bool isRequired = field.Required is null ? false : field.Required.Value;
+            @switch (field.Type.ToLower())
+            {
+                case "text":
+                    <MudTextField Class="pa-2" Label="@field.Label" T="string" @bind-Value="@field.StringValue" Required="@isRequired" RequiredError="@($"{field.Label} is required")" />
+                    break;
+                case "email":
+                    <MudTextField Class="pa-2" Label="@field.Label" T="string" @bind-Value="@field.StringValue" Required="@isRequired" RequiredError="@($"{field.Label} is required")"
+                                  Validation="@(new EmailAddressAttribute() {ErrorMessage = $"The {field.Label} is invalid"})" />
+                    break;
+                case "number":
+                    <MudNumericField Class="pa-2" Label="@field.Label" T="int?" @bind-Value="@field.IntValue" Min="@(!field.Min.HasValue ? 0 : field.Min.Value)" Max="@(!field.Max.HasValue ? 0 : field.Max.Value)" 
+                                                  Required="@isRequired" RequiredError="@($"{field.Label} is required")"
+                                                  Validation="@(new RangeAttribute(!field.Min.HasValue ? 0 : field.Min.Value,!field.Max.HasValue ? 0 : field.Max.Value) {ErrorMessage = $"The value of {field.Label} is not in the range."})" />
+                    break;
+                case "dropdown":
+                    <MudSelect Class="pa-2" Label="@field.Label" T="string" @bind-Value="@field.StringValue" Required="@isRequired" RequiredError="@($"{field.Label} is required")">
+                        @foreach (var option in field.Values!)
+                        {
+                            <MudSelectItem T="string" Value="@option">@option</MudSelectItem>
+                        }
+                    </MudSelect>
+                    break;
+                case "checkbox":
+                    <MudCheckBox Class="pa-2" T="bool" @bind-Value="@field.BoolValue" Label="@field.Label" Required="@isRequired" RequiredError="@($"{field.Label} is required")" />
+                    break;
+            }
+        }
+        <div class="d-flex align-center justify-space-between">
+            <MudButton OnClick="SubmitForm" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto">Submit</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" OnClick="@(()=>form.ResetAsync())" Class="mx-2">Reset</MudButton>
+        </div>
+    </MudPaper>
+</MudForm>
+
+@code {
+    public MudForm form { get; set; } = new MudForm();
+    [Parameter] public FormMetadata MetaForm { get; set; } = new FormMetadata();
+    [Parameter] public EventCallback OnSubmit { get; set; }
+    private bool success = false;
+
+    private async Task SubmitForm()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            await OnSubmit.InvokeAsync();
+            await form.ResetAsync();
+            success = false;
+        }
+    }
+}

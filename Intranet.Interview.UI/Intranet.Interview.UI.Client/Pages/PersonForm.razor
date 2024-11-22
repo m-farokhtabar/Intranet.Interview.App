@@ -1,0 +1,36 @@
+﻿@page "/person-form"
+@using Intranet.Interview.UI.Client.Model
+@using Intranet.Interview.UI.Client.Services.FormSrv
+@rendermode InteractiveWebAssembly
+@inject IFormService FormSrv
+@inject IDialogService DialogService
+
+<MudDialogProvider />
+<PageTitle>@metaForm?.Title</PageTitle>
+
+
+@if (metaForm is not null)
+{
+    <DataForm MetaForm="metaForm" OnSubmit="OnValidSubmit" />
+    <button @onclick="OnValidSubmit">test</button>
+}
+
+@code {
+    private FormMetadata? metaForm = null;
+    private readonly DialogOptions option = new () { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    protected override async Task OnInitializedAsync()
+    {
+        metaForm = await FormSrv.GetFormMeta("person");
+    }
+    private async Task OnValidSubmit()
+    {
+        var result = await FormSrv.PostFormData(metaForm!.Fields, "person");         
+        string Message = result ? "The Person Form has been saved successfully." : "There is an error during sending data to server";
+        var parameters = new DialogParameters
+        {
+            { "Message",  Message}
+        };
+        DialogService.Show<Dialog>("The Person Form has been saved successfully.", parameters, option);
+    }
+}
