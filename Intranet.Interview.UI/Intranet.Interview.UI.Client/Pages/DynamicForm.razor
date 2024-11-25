@@ -1,4 +1,4 @@
-﻿@page "/person-form"
+﻿@page "/dynamic-form"
 @using Intranet.Interview.UI.Client.Model
 @using Intranet.Interview.UI.Client.Services.FormSrv
 @rendermode InteractiveWebAssembly
@@ -11,7 +11,7 @@
 
 @if (metaForm is not null)
 {
-    <DataForm MetaForm="metaForm" OnSubmit="OnValidSubmit" />    
+    <DataForm MetaForm="metaForm" OnSubmit="OnValidSubmit" />
 }
 
 @code {
@@ -19,17 +19,18 @@
     private readonly DialogOptions option = new () { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
     protected override async Task OnInitializedAsync()
-    {
-        metaForm = await FormSrv.GetFormMeta("person");
-    }
+    {        
+        metaForm = await FormSrv.GetFormMeta(Guid.Parse("c62b97fa-df48-41a4-bc05-d7f1f3b2d8c0"));
+    }    
     private async Task OnValidSubmit()
     {
-        var result = await FormSrv.PostFormData(metaForm!.Fields, "person");         
-        string Message = result ? "The Person Form has been saved successfully." : "There is an error during sending data to server";
+        (bool serverStatus, string json) = await FormSrv.PostFormData(metaForm!.Fields);
+        string Message = serverStatus ? $"The {metaForm?.Title} has been saved successfully." : "There is an error during sending data to server";
         var parameters = new DialogParameters
         {
-            { "Message",  Message}
+            { "Message",  Message},
+            { "Content", json}
         };
-        DialogService.Show<Dialog>("The Person Form has been saved successfully.", parameters, option);
+        DialogService.Show<Dialog>("Information Form", parameters, option);
     }
 }

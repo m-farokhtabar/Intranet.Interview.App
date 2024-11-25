@@ -1,6 +1,7 @@
 ﻿using Intranet.Interview.Application.SeedWorks;
 using Intranet.Interview.Domain.DataForm;
 using Intranet.Interview.Infrastructure.Data;
+using Intranet.Interview.Infrastructure.Data.ReadDb;
 using Intranet.Interview.Infrastructure.DbProvider;
 using Intranet.Interview.Infrastructure.Domain;
 using Mapper.GSB.Domain.SeedWork;
@@ -20,11 +21,12 @@ public static class InfrastructureServiceExtension
     /// </summary>
     /// <param name="services"></param>
     /// <param name="dbConnection"></param>
-    public static void InfrastructureConfiguration(this IServiceCollection services, string dbConnection)
+    public static void InfrastructureConfiguration(this IServiceCollection services, string dbConnection, string readDbConnection)
     {
         services.AddScoped<IFormMetaDataProvider, FormMetaDataProvider>();
-        services.AddScoped<IPersonRepository, PersonRepository>();
+        services.AddScoped<IFormDataRepository, FormDataRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddDbContext<AppDbContext>(Opts => Opts.UseInMemoryDatabase(dbConnection));
+        services.AddSingleton<IReadDataDbConnection>(_ => new ReadDataDbConnection(readDbConnection));
     }
 }

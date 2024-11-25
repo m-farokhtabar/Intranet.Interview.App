@@ -4,20 +4,20 @@ using Intranet.Interview.Infrastructure.Data;
 namespace Intranet.Interview.Infrastructure.Domain;
 
 /// <summary>
-/// For Description <see cref="IPersonRepository"/>
+/// For Description <see cref="IFormDataRepository"/>
 /// </summary>
-internal class PersonRepository : IPersonRepository
+internal class FormDataRepository : IFormDataRepository
 {
     private readonly AppDbContext context;
 
-    public PersonRepository(AppDbContext context)
+    public FormDataRepository(AppDbContext context)
     {
         this.context = context;
     }
     /// <summary>
-    /// For Description <see cref="IPersonRepository.AddAsync(Person)"/>
+    /// For Description <see cref="IFormDataRepository.AddAsync(FormData)"/>
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public async Task AddAsync(Person entity) => await context.Persons.AddAsync(entity).ConfigureAwait(false);
+    public async Task AddAsync(FormData entity) => await context.FormData.AddAsync(entity).ConfigureAwait(false);
 }

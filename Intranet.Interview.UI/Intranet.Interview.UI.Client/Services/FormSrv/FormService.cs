@@ -14,26 +14,25 @@ namespace Intranet.Interview.UI.Client.Services.FormSrv
         {
             this.http = http;
         }
-        public async Task<FormMetadata> GetFormMeta(string formName)
+        public async Task<FormMetadata> GetFormMeta(Guid formId)
         {
-            var result = await http.GetFromJsonAsync<FormMetadata>($"api/{formName}/MetaData");
+            var result = await http.GetFromJsonAsync<FormMetadata>($"api/FormData/MetaData/{formId}");
             return result is null ? throw new Exception() : result;
         }
         /// <summary>
         /// Save Data Form Based on form name
         /// </summary>
         /// <param name="Fields"></param>
-        /// <param name="formName"></param>
         /// <returns></returns>
-        public async Task<bool> PostFormData(List<Field> fields, string formName)
+        public async Task<(bool serverStatus,string json)> PostFormData(List<Field> fields)
         {
             string jsonForm = FieldsToJson(fields);
             Console.WriteLine(jsonForm);
             StringContent content = new(jsonForm, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await http.PostAsync($"api/{formName}", content);
+            HttpResponseMessage response = await http.PostAsync($"api/FormData", content);
 
-            return response.IsSuccessStatusCode;
+            return (response.IsSuccessStatusCode, jsonForm);
         }
     }
 }

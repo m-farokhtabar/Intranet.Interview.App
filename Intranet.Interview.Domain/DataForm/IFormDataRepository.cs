@@ -3,12 +3,12 @@
 /// <summary>
 /// Manage people data from an external resource.
 /// </summary>
-public interface IPersonRepository
+public interface IFormDataRepository
 {
     /// <summary>
-    /// Insert new person
+    /// Insert new Form
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    Task AddAsync(Person entity);
+    Task AddAsync(FormData entity);
 }

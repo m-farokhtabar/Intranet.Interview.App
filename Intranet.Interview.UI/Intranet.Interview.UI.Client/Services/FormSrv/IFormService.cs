@@ -4,7 +4,7 @@ namespace Intranet.Interview.UI.Client.Services.FormSrv
 {
     public interface IFormService
     {
-        Task<FormMetadata> GetFormMeta(string formName);
-        Task<bool> PostFormData(List<Field> fields, string formName);
+        Task<FormMetadata> GetFormMeta(Guid formId);
+        Task<(bool serverStatus, string json)> PostFormData(List<Field> fields);
     }
 }

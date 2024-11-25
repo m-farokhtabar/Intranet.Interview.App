@@ -1,16 +1,14 @@
 using Intranet.Interview.API.StartupConfig;
 using Intranet.Interview.Infrastructure.StartupConfig;
 using Intranet.Interview.Application.StratupConfig;
+using Intranet.Interview.Infrastructure.Data.ReadDb;
+using Intranet.Interview.Infrastructure.DbProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-ApplicationSettings appSettings = builder.Configuration.GetSection("ApplicationSettings").Get<ApplicationSettings>()!;
-builder.Services.AddSingleton<ApplicationSettings>(appSettings);
-
 builder.Services.ApplicationConfiguration();
-builder.Services.InfrastructureConfiguration(builder.Configuration["ConnectionStrings:DbConnection"]!);
-
+builder.Services.InfrastructureConfiguration(builder.Configuration["ConnectionStrings:DbConnection"]!, builder.Configuration["ConnectionStrings:MetaDbConnection"]!);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

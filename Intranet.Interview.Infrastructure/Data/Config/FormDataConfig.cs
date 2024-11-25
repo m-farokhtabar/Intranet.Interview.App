@@ -5,17 +5,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Intranet.Interview.Infrastructure.Data.Config
 {
     /// <summary>
-    /// Configuration class for the Person entity, defining the mapping between the entity and the database table
+    /// Configuration class for the FormData entity, defining the mapping between the entity and the database table
     /// </summary>
-    internal class PersonConfig : IEntityTypeConfiguration<Person>
+    internal class FormDataConfig : IEntityTypeConfiguration<FormData>
     {
         /// <summary>
-        /// Configures the table and columns for the Person entity.
+        /// Configures the table and columns for the FormData entity.
         /// This method specifies key constraints, property requirements, 
         /// column configurations, and indexes.
         /// </summary>
         /// <param name="builder"></param>
-        public void Configure(EntityTypeBuilder<Person> builder)
+        public void Configure(EntityTypeBuilder<FormData> builder)
         {            
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Version).IsRequired(true);
@@ -23,11 +23,7 @@ namespace Intranet.Interview.Infrastructure.Data.Config
             builder.Property(x => x.ModifiedDate).IsRequired();
             builder.Property(x => x.RowVersion).IsRowVersion();
 
-            builder.Property(x => x.Name).IsRequired(true);
-            builder.Property(x => x.Email).IsRequired(true);
-            builder.Property(x => x.Age).IsRequired(false);
-            builder.Property(x => x.Industry).IsRequired(true);
-            builder.Property(x => x.SubscribeToNewsletter).IsRequired(false);                       
+            builder.Property(x => x.JsonData).IsRequired(true);            
         }
     }
 }

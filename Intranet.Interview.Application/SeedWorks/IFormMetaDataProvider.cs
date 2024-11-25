@@ -12,5 +12,5 @@ public interface IFormMetaDataProvider
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<FormMetadataDto> Get(Guid id);
+    Task<FormMetadataDto?> Get(Guid id);
 }
