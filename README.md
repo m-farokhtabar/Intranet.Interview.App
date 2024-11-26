@@ -24,7 +24,18 @@ This project implements a dynamic web-based form generator that renders forms ba
 5. **Restore Dependencies**:
    - Restore NuGet packages to ensure all dependencies are installed.
 
-6. **Build and Run**:
+6. **To set up a custom form in a dynamic form, follow these steps**:
+   - The form configurations are stored in an SQLite database, which is part of the **Intranet.Interview.API project (data.db - FormMetaData Table)**.
+   - You can modify the **content field** add your own form configurations if needed. Simply adjust the entries in the database as required for your use case.
+   -  To use the dynamic form functionality, I have prepared two sample forms with the following IDs:
+   
+      **Feedback Form: c62b97fa-df48-41a4-bc05-d7f1f3b2d8c0**<br/>
+      **Sample Form: c991d133-1eaf-48dd-998b-5ebfb13fbf7b**    
+   - To change the form, you only need to update the **Id** in the **Intranet.Interview.UI.Client** project, specifically in the **DynamicForm.razor** file.<br/>
+     For example, to load a **feedback form**, update the metaForm line like this:<br/>
+     **metaForm = await FormSrv.GetFormMeta(Guid.Parse("c62b97fa-df48-41a4-bc05-d7f1f3b2d8c0"));**
+
+7. **Build and Run**:
    - Build the solution and run the projects. The application will open in your browser, with the UI rendered by **Blazor WebAssembly** and the backend API handling requests.
 
 ---
